@@ -5,6 +5,7 @@ mixer.music.load('c2b241eaaf1726a.mp3')
 mixer.music.play()
 jump = mixer.Sound('otskok-myacha.ogg')
 win_lose = mixer.Sound('40a84da0291a73b-1.mp3')
+lose_win = mixer.Sound('9996d7395fd837fc14.mp3')
 
 class GameSprite(sprite.Sprite):
     def __init__(self, player_image, player_x, player_y, player_speed, wight, height):
@@ -74,11 +75,16 @@ while game:
 
         if sprite.collide_rect(rocket1, ball) or  sprite.collide_rect(rocket2, ball):
             speed_x *= -1
+            speed_x *= 1.025
+            speed_y *= 1.025
             jump.play()
         
         if ball.rect.bottom > win_height or ball.rect.y < 0:
             speed_y *= -1
+            speed_y *= 1.025
+            speed_x *= 1.025
             jump.play()
+
         
         if ball.rect.x < -50:
             finish = True
@@ -88,7 +94,8 @@ while game:
         if ball.rect.x > win_wight:
             finish = True
             window.blit(lose2,(200,200))
-            win_lose.play()
+            lose_win.play()
+        
 
         rocket1.reset()
         rocket2.reset()
