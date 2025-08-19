@@ -1,5 +1,11 @@
 from pygame import*
 
+mixer.init()
+mixer.music.load('c2b241eaaf1726a.mp3')
+mixer.music.play()
+jump = mixer.Sound('otskok-myacha.ogg')
+win_lose = mixer.Sound('40a84da0291a73b-1.mp3')
+
 class GameSprite(sprite.Sprite):
     def __init__(self, player_image, player_x, player_y, player_speed, wight, height):
         super().__init__()
@@ -45,6 +51,14 @@ rocket1 = Player('sport_12364818.png', 30, 200, 4, 50, 150)
 rocket2 = Player('sport_12364818.png', 520, 200, 4, 50, 150)
 ball = GameSprite('beach-ball_8881052.png', 200, 200, 4, 50, 50)
 
+font.init()
+font = font.Font(None, 35)
+lose1 = font.render("Игрок 1 проиграл!", True,(240, 232, 10))
+lose2 = font.render("Игрок 2 проиграл!",True, (240, 232, 10))
+
+speed_x = 3
+speed_y = 3
+
 while game:
     for e in event.get():
         if e.type == QUIT:
@@ -54,6 +68,27 @@ while game:
         window.blit(back,(0 , 0))
         rocket1.update_l()
         rocket2.update_r()
+
+        ball.rect.x += speed_x
+        ball.rect.y += speed_y
+
+        if sprite.collide_rect(rocket1, ball) or  sprite.collide_rect(rocket2, ball):
+            speed_x *= -1
+            jump.play()
+        
+        if ball.rect.bottom > win_height or ball.rect.y < 0:
+            speed_y *= -1
+            jump.play()
+        
+        if ball.rect.x < -50:
+            finish = True
+            window.blit(lose1, (200,200))
+            win_lose.play()
+
+        if ball.rect.x > win_wight:
+            finish = True
+            window.blit(lose2,(200,200))
+            win_lose.play()
 
         rocket1.reset()
         rocket2.reset()
